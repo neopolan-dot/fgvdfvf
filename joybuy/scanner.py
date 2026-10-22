@@ -268,7 +268,15 @@ def main():
             try:
                 page = context.new_page()
                 page.set_default_timeout(12000)
-                page.goto(URL, wait_until="domcontentloaded", timeout=60000)
+                http_failures = []
+                def record_failure(response):
+                    parts = urlsplit(response.url)
+                    if response.status >= 400 and (parts.hostname or "").endswith("joybuy.de") and len(http_failures) < 20:
+                        http_failures.append({"status": response.status, "host": parts.hostname, "path": parts.path})
+                page.on("response", record_failure)
+                response = page.goto(URL, wait_until="domcontentloaded", timeout=60000)
+                report["initial_http_status"] = response.status if response else None
+                report["http_failures"] = http_failures
                 page.wait_for_timeout(wait_ms)
                 dismiss_banners(page)
                 report["browser"] = {"engine": "webkit", "device": "iPhone 13",
@@ -276,7 +284,8 @@ def main():
                 print("JOYBUY_BROWSER " + json.dumps(report["browser"], ensure_ascii=False), flush=True)
                 block = body_block(page)
                 if block:
-                    page.reload(wait_until="domcontentloaded", timeout=45000)
+                    response = page.reload(wait_until="domcontentloaded", timeout=45000)
+                    report["reload_http_status"] = response.status if response else None
                     page.wait_for_timeout(wait_ms)
                     block = body_block(page)
                 if block:
