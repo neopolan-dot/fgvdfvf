@@ -7,7 +7,9 @@ Ein eigener PC, VMware, ein LLM-API-Schlüssel oder ein Browser-Abo wird nicht b
 ## Ablauf
 
 - Geplanter Start: täglich 19:00 Uhr, Europe/Berlin (Sommer-/Winterzeit berücksichtigt).
-- WebKit mit dem Playwright-Geräteprofil iPhone 13, einschließlich Safari-User-Agent.
+- Vorinstallierter Chrome mit dem Playwright-Geräteprofil iPhone 13, einschließlich Safari-User-Agent.
+  Der Renderer bleibt Chrome; für die mobile Seitendarstellung werden iPhone-Kennung,
+  Bildschirmgröße und Touch-Einstellungen verwendet. WebKit bleibt im Skript optional verfügbar.
 - Die heutigen Reiter 20, 21 und 22 Uhr werden einzeln angeklickt.
 - Die Auswahl muss über die sichtbare Markierung oder semantische Attribute bestätigt sein.
 - Nach jedem Scrollschritt wird mindestens 5,5 Sekunden gewartet.

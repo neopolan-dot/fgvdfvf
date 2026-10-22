@@ -263,7 +263,9 @@ def main():
     deadline = time.monotonic() + 600
     try:
         with sync_playwright() as playwright:
-            browser = playwright.webkit.launch(headless=True)
+            engine = os.environ.get("JOYBUY_BROWSER", "webkit")
+            browser = (playwright.chromium.launch(channel="chrome", headless=True)
+                       if engine == "chrome" else playwright.webkit.launch(headless=True))
             context = browser.new_context(**playwright.devices["iPhone 13"], locale="de-DE", timezone_id="Europe/Berlin")
             try:
                 page = context.new_page()
@@ -279,7 +281,7 @@ def main():
                 report["http_failures"] = http_failures
                 page.wait_for_timeout(wait_ms)
                 dismiss_banners(page)
-                report["browser"] = {"engine": "webkit", "device": "iPhone 13",
+                report["browser"] = {"engine": engine, "device": "iPhone 13",
                     "user_agent": page.evaluate("navigator.userAgent"), "final_url": page.url}
                 print("JOYBUY_BROWSER " + json.dumps(report["browser"], ensure_ascii=False), flush=True)
                 block = body_block(page)

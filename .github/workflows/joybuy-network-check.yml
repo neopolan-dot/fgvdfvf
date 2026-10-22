@@ -1,9 +1,6 @@
 name: Joybuy Network Diagnostic
 on:
   workflow_dispatch:
-  push:
-    paths:
-      - '.github/workflows/joybuy-network-check.yml'
 permissions:
   contents: read
 jobs:
@@ -23,15 +20,16 @@ jobs:
           except urllib.error.HTTPError as error:
               response = error
           raw = response.read(300000).decode("utf-8", errors="replace")
-          clean = re.sub(r"<script\\b[^>]*>.*?</script>|<style\\b[^>]*>.*?</style>", " ", raw, flags=re.S|re.I)
+          clean = re.sub(r"<script\b[^>]*>.*?</script>|<style\b[^>]*>.*?</style>", " ", raw, flags=re.S|re.I)
           clean = html.unescape(re.sub(r"<[^>]+>", " ", clean))
-          clean = re.sub(r"\\s+", " ", clean).strip()
+          clean = re.sub(r"\s+", " ", clean).strip()
           result = {"http_status":response.status, "final_url":response.url,
                     "retry_after":response.headers.get("Retry-After"),
                     "server":response.headers.get("Server"),
                     "content_type":response.headers.get("Content-Type"),
                     "body_excerpt":clean[:1800],
-                    "contains_interruption_text":"Vorübergehende Dienstunterbrechung" in raw,
-                    "contains_error403":"error403" in raw}
+                    "body_contains_interruption":"Vorübergehende Dienstunterbrechung" in clean,
+                    "html_contains_error403_reference":"error403" in raw}
           print("JOYBUY_NETWORK_DIAGNOSTIC " + json.dumps(result, ensure_ascii=False))
           PY
+
