@@ -1,0 +1,22 @@
+name: Joybuy browser alternatives
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - joybuy/alternatives.py
+      - .github/workflows/joybuy-alternatives.yml
+permissions:
+  contents: read
+jobs:
+  compare:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Install Python browser library
+        run: python -m pip install -r requirements.txt
+      - name: Compare ordinary desktop and mobile browser profiles
+        run: xvfb-run -a python -m joybuy.alternatives
