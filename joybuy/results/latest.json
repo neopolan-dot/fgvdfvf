@@ -2,20 +2,39 @@
   "schema_version": 1,
   "date": "2026-10-22",
   "timezone": "Europe/Berlin",
-  "started_at": "2026-10-22T21:53:56+02:00",
+  "started_at": "2026-10-22T22:16:43+02:00",
   "source": "https://m.joybuy.de/marketing/happy-hour",
   "status": "incomplete",
   "slots": [],
   "market_prices_verified": false,
   "orderability_verified": false,
+  "initial_http_status": 200,
+  "http_failures": [
+    {
+      "status": 403,
+      "host": "color-api.joybuy.de",
+      "path": "/"
+    },
+    {
+      "status": 403,
+      "host": "color-api.joybuy.de",
+      "path": "/"
+    },
+    {
+      "status": 403,
+      "host": "color-api.joybuy.de",
+      "path": "/"
+    }
+  ],
   "browser": {
-    "engine": "webkit",
+    "engine": "chrome",
     "device": "iPhone 13",
     "user_agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 15_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.6 Mobile/15E148 Safari/604.1",
     "final_url": "https://m.joybuy.de/marketing/happy-hour"
   },
+  "reload_http_status": 200,
   "reason": "temporary_service_interruption",
   "page_text": "\nVorübergehende Dienstunterbrechung\nUnsere Systeme sind derzeit überlastet. Zum Schutz Ihrer Daten haben wir diese Funktion vorübergehend deaktiviert.\nAktualisieren",
   "error": "temporary_service_interruption",
-  "finished_at": "2026-10-22T21:54:11+02:00"
+  "finished_at": "2026-10-22T22:16:59+02:00"
 }
