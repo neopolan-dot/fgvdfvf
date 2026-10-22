@@ -2,7 +2,7 @@
   "schema_version": 1,
   "date": "2026-10-22",
   "timezone": "Europe/Berlin",
-  "started_at": "2026-10-22T22:50:55+02:00",
+  "started_at": "2026-10-22T22:54:00+02:00",
   "source": "https://m.joybuy.de/marketing/happy-hour",
   "status": "incomplete",
   "slots": [],
@@ -36,5 +36,5 @@
   "reason": "temporary_service_interruption",
   "page_text": "\nVorübergehende Dienstunterbrechung\nUnsere Systeme sind derzeit überlastet. Zum Schutz Ihrer Daten haben wir diese Funktion vorübergehend deaktiviert.\nAktualisieren",
   "error": "temporary_service_interruption",
-  "finished_at": "2026-10-22T22:51:18+02:00"
+  "finished_at": "2026-10-22T22:54:28+02:00"
 }
