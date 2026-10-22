@@ -1,0 +1,20 @@
+name: Joybuy public HTML test
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - joybuy/static_test.py
+      - .github/workflows/joybuy-static-test.yml
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - run: python -m pip install -r requirements.txt
+      - run: python -m joybuy.static_test
