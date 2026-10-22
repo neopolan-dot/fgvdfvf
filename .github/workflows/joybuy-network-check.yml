@@ -1,0 +1,37 @@
+name: Joybuy Network Diagnostic
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/joybuy-network-check.yml'
+permissions:
+  contents: read
+jobs:
+  diagnose:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 2
+    steps:
+      - name: Inspect one public Joybuy response
+        run: |
+          python3 - <<'PY'
+          import html, json, re, urllib.request, urllib.error
+          url = "https://m.joybuy.de/marketing/happy-hour"
+          ua = "Mozilla/5.0 (iPhone; CPU iPhone OS 15_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.6 Mobile/15E148 Safari/604.1"
+          request = urllib.request.Request(url, headers={"User-Agent":ua, "Accept-Language":"de-DE,de;q=0.9"})
+          try:
+              response = urllib.request.urlopen(request, timeout=30)
+          except urllib.error.HTTPError as error:
+              response = error
+          raw = response.read(300000).decode("utf-8", errors="replace")
+          clean = re.sub(r"<script\\b[^>]*>.*?</script>|<style\\b[^>]*>.*?</style>", " ", raw, flags=re.S|re.I)
+          clean = html.unescape(re.sub(r"<[^>]+>", " ", clean))
+          clean = re.sub(r"\\s+", " ", clean).strip()
+          result = {"http_status":response.status, "final_url":response.url,
+                    "retry_after":response.headers.get("Retry-After"),
+                    "server":response.headers.get("Server"),
+                    "content_type":response.headers.get("Content-Type"),
+                    "body_excerpt":clean[:1800],
+                    "contains_interruption_text":"Vorübergehende Dienstunterbrechung" in raw,
+                    "contains_error403":"error403" in raw}
+          print("JOYBUY_NETWORK_DIAGNOSTIC " + json.dumps(result, ensure_ascii=False))
+          PY
