@@ -1,0 +1,53 @@
+name: Joybuy Cloud Scanner
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'joybuy/*.py'
+      - 'requirements.txt'
+      - '.github/workflows/joybuy.yml'
+  schedule:
+    - cron: '0 19 * * *'
+      timezone: Europe/Berlin
+
+permissions:
+  contents: write
+
+concurrency:
+  group: joybuy-cloud-scanner
+  cancel-in-progress: false
+
+jobs:
+  scan:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Validate safe extraction
+        run: python -m unittest joybuy.test_scanner -v
+      - name: Install mobile WebKit browser
+        run: |
+          python -m pip install -r requirements.txt
+          python -m playwright install --with-deps webkit
+      - name: Click today's three tabs and load their products
+        id: scan
+        continue-on-error: true
+        run: python -m joybuy.scanner
+      - name: Publish public deal data
+        if: ${{ always() && steps.scan.outcome != 'skipped' }}
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python -m joybuy.publish
+      - name: Show scan summary
+        if: ${{ always() }}
+        run: |
+          if [ -f results/summary.md ]; then
+            cat results/summary.md >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - name: Preserve failure status for incomplete scans
+        if: ${{ steps.scan.outcome == 'failure' }}
+        run: exit 1
