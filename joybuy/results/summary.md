@@ -1,10 +1,11 @@
-# Joybuy Happy Hour 2026-11-24
+# Joybuy Happy Hour 2026-11-25
 
 Status: incomplete
 
 | Uhr | Auswahl bestätigt | Produkte | Ergebnis |
 |---|---|---:|---|
-
-temporary_service_interruption
+| 20:00 | False | 0 | unconfirmed |
+| 21:00 | False | 0 | unconfirmed |
+| 22:00 | False | 0 | unconfirmed |
 
 Preise sind Seitenanzeigen. Kaufbarkeit und unabhängige Marktpreise sind ungeprüft.
